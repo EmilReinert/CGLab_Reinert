@@ -1,3 +1,5 @@
+#Framework copy used by Emil Reinert 117577#
+
 ## OpenGLFramework
 is a small cross-platform framework for learning OpenGL programming
 

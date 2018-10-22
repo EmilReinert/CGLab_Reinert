@@ -16,6 +16,8 @@ class scene_graph
 	scene_graph();	
 	scene_graph(std::string name);
 	~scene_graph();
+
+	void initialize();
 	//get-set string name of scene graph
 	std::string getName();
 	void setName(std::string newname);

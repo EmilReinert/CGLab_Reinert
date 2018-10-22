@@ -104,7 +104,7 @@ using namespace gl;
 	void node::removeChild(std::string name){
 		int counter =0;
 		for (node* child: children){
-			if(child->getName().compare(name)){
+			if(!child->getName().compare(name)){
 				children.erase(children.begin()+counter);
 				return;
 			}

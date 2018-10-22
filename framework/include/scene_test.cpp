@@ -6,7 +6,7 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-	printf("hi\n");
+	printf("=================TESTS=================\n");
 /*
 //test if node heredity works
 	camera_node mainCam = camera_node{"camera"};
@@ -32,7 +32,10 @@ int main(int argc, char* argv[]) {
 	jupiter.addChild(j_moon_1);	
 	jupiter.addChild(j_moon_2);
 	earth.addChild(e_moon);
-
+	//printing scene
+	scene.printGraph();
+	//testing remove
+	system.removeChild("jupiter");
 	scene.printGraph();
 	//cout<<e_moon.getPath()<<endl;	
 	//cout<<e_moon.getDepth()<<endl;	

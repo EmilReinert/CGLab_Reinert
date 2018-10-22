@@ -1,6 +1,7 @@
 #ifndef APPLICATION_SOLAR_HPP
 #define APPLICATION_SOLAR_HPP
 
+#include "scene_graph.hpp"
 #include "application.hpp"
 #include "model.hpp"
 #include "structs.hpp"

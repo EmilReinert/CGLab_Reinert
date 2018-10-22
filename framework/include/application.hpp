@@ -74,6 +74,7 @@ void Application::run(int argc, char* argv[], unsigned ver_major, unsigned ver_m
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     
+    printf("calling from render\n");
     // rendering loop
     while (!glfwWindowShouldClose(window)) {
       // query input

@@ -19,6 +19,8 @@ using namespace gl;
 
 #include <iostream>
 
+#include "scene_graph.hpp"
+
 ApplicationSolar::ApplicationSolar(std::string const& resource_path)
  :Application{resource_path}
  ,planet_object{}
@@ -35,7 +37,33 @@ ApplicationSolar::~ApplicationSolar() {
   glDeleteVertexArrays(1, &planet_object.vertex_AO);
 }
 
+///SCENE SETUP
+
+void ApplicationSolar::sceneSetup(){
+  scene_graph scene = scene_graph{"scene"};
+  //creating singualar nodes
+  node system = node{"solarSystem"};
+  geometry_node sun = geometry_node{"sun"};
+  geometry_node jupiter = geometry_node{"jupiter"};
+  geometry_node earth = geometry_node{"earth"};
+  geometry_node j_moon_1 = geometry_node{"jupiterMoon1"}; 
+  geometry_node j_moon_2 = geometry_node{"jupiterMoon2"};
+  geometry_node e_moon = geometry_node{"earthMoon"};
+  /////////creating hirarchie//////////////
+  scene.setRoot(system);
+  system.addChild(sun);
+  system.addChild(jupiter);
+  system.addChild(earth);
+  jupiter.addChild(j_moon_1); 
+  jupiter.addChild(j_moon_2);
+  earth.addChild(e_moon);
+  //assigning scene to application
+  //m_scene = scene;
+}
+
+
 void ApplicationSolar::render() const {
+  /*
   // bind shader to upload uniforms
   glUseProgram(m_shaders.at("planet").handle);
 
@@ -47,6 +75,42 @@ void ApplicationSolar::render() const {
   glm::fmat4 normal_matrix = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix);
   glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("NormalMatrix"),
                      1, GL_FALSE, glm::value_ptr(normal_matrix));
+
+  // bind the VAO to draw
+  glBindVertexArray(planet_object.vertex_AO);
+
+  // draw bound vertex array using bound shader
+  glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);*/
+    // bind shader to upload uniforms
+
+  glUseProgram(m_shaders.at("planet").handle);
+
+//  for
+  glm::fmat4 model_matrix = glm::rotate(glm::fmat4{}, float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
+  model_matrix = glm::translate(model_matrix, glm::fvec3{0.0f, 0.0f, -1.0f});
+  glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model_matrix));
+
+  // extra matrix for normal transformation to keep them orthogonal to surface
+  glm::fmat4 normal_matrix = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix);
+  glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("NormalMatrix"),
+                     1, GL_FALSE, glm::value_ptr(normal_matrix));
+
+  // bind the VAO to draw
+  glBindVertexArray(planet_object.vertex_AO);
+
+  // draw bound vertex array using bound shader
+  glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);
+
+////
+
+  glm::fmat4 model_matrix2 = glm::rotate(glm::fmat4{}, float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
+  model_matrix2 = glm::translate(model_matrix2, glm::fvec3{0.0f, 0.0f, -2.0f});
+  glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model_matrix2));
+
+  // extra matrix for normal transformation to keep them orthogonal to surface
+  glm::fmat4 normal_matrix2 = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix2);
+  glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("NormalMatrix"),
+                     1, GL_FALSE, glm::value_ptr(normal_matrix2));
 
   // bind the VAO to draw
   glBindVertexArray(planet_object.vertex_AO);
@@ -94,7 +158,7 @@ void ApplicationSolar::initializeShaderPrograms() {
 // load models
 void ApplicationSolar::initializeGeometry() {
   model planet_model = model_loader::obj(m_resource_path + "models/sphere.obj", model::NORMAL);
-  
+
   // generate vertex array object
   glGenVertexArrays(1, &planet_object.vertex_AO);
   // bind the array for attaching buffers
@@ -127,6 +191,7 @@ void ApplicationSolar::initializeGeometry() {
   planet_object.draw_mode = GL_TRIANGLES;
   // transfer number of indices to model object 
   planet_object.num_elements = GLsizei(planet_model.indices.size());
+
 }
 
 ///////////////////////////// callback functions for window events ////////////

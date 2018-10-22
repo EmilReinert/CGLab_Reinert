@@ -1,10 +1,11 @@
 #ifndef APPLICATION_SOLAR_HPP
 #define APPLICATION_SOLAR_HPP
 
-#include "scene_graph.hpp"
 #include "application.hpp"
 #include "model.hpp"
 #include "structs.hpp"
+
+#include "scene_graph.hpp"
 
 // gpu representation of model
 class ApplicationSolar : public Application {
@@ -24,6 +25,11 @@ class ApplicationSolar : public Application {
   // draw all objects
   void render() const;
 
+  //////SCENE-SETUP here!! //////////////
+  void sceneSetup();
+  //holds scene
+  //scene_graph m_scene;
+
  protected:
   void initializeShaderPrograms();
   void initializeGeometry();
@@ -36,11 +42,12 @@ class ApplicationSolar : public Application {
 
   // cpu representation of model
   model_object planet_object;
-  
+
   // camera transform matrix
   glm::fmat4 m_view_transform;
   // camera projection matrix
   glm::fmat4 m_view_projection;
+
 };
 
 #endif

@@ -23,28 +23,6 @@ using namespace gl;
 	scene_graph::scene_graph(std::string name):m_name{name}{}
 	scene_graph::~scene_graph(){}
 
-///////////building solar system here!
-	void scene_graph::initialize(){
-		//creating singualar nodes
-		node system = node{"solarSystem"};
-		camera_node cam = camera_node{"camera"};
-		geometry_node sun = geometry_node{"sun"};
-		geometry_node jupiter = geometry_node{"jupiter"};
-		geometry_node earth = geometry_node{"earth"};
-		geometry_node j_moon_1 = geometry_node{"jupiterMoon1"};	
-		geometry_node j_moon_2 = geometry_node{"jupiterMoon2"};
-		geometry_node e_moon = geometry_node{"earthMoon"};
-		/////////creating hirarchie//////////////
-		setRoot(system);
-		system.addChild(cam);
-		system.addChild(sun);
-		system.addChild(jupiter);
-		system.addChild(earth);
-		jupiter.addChild(j_moon_1);	
-		jupiter.addChild(j_moon_2);
-		earth.addChild(e_moon);
-	}
-
 
 	//get-set string name of scene graph
 	std::string scene_graph::getName(){return m_name;}

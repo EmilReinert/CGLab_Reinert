@@ -18,4 +18,14 @@ using namespace gl;
 #include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
-
+#include "scene_graph.hpp"
+	scene_graph::scene_graph(){}
+	scene_graph::~scene_graph(){}
+	//get-set string name of scene graph
+	std::string scene_graph::getName(){}
+	void scene_graph::setName(std::string newname){}
+	//get-set root node
+	node scene_graph::getRoot() const{}
+	void scene_graph::setRoot(node const& newroot){}
+	//prints names of all children in graph
+	void scene_graph::printGraph(){}

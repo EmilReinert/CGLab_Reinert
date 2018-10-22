@@ -61,6 +61,10 @@ include_directories(application/include)
 add_executable(solar_system application/source/application_solar.cpp)
 target_link_libraries(solar_system framework)
 
+####TEST executables
+add_executable(scene_test framework/include/scene_test.cpp)
+target_link_libraries(scene_test framework)
+
 # MacOS doesnt support simple compat mode required for examples
 if(NOT APPLE)
   # add setting whether examples are build

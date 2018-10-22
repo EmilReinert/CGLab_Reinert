@@ -37,7 +37,7 @@ using namespace gl;
 //returns child with specific name
 	node* node::getChild(std::string child_name){
 		for (node* child: children){
-			if(child->getName().compare(child_name)){
+			if(!child->getName().compare(child_name)){
 				return child;
 			}
 		}

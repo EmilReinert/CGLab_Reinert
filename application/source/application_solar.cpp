@@ -18,8 +18,9 @@ using namespace gl;
 #include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
-
 #include "scene_graph.hpp"
+#include "node.hpp"
+
 
 ApplicationSolar::ApplicationSolar(std::string const& resource_path)
  :Application{resource_path}
@@ -39,7 +40,7 @@ ApplicationSolar::~ApplicationSolar() {
 
 ///SCENE SETUP
 
-void ApplicationSolar::sceneSetup(){
+  static scene_graph sceneSetup(){
   scene_graph scene = scene_graph{"scene"};
   //creating singualar nodes
   node system = node{"solarSystem"};
@@ -58,9 +59,10 @@ void ApplicationSolar::sceneSetup(){
   jupiter.addChild(j_moon_2);
   earth.addChild(e_moon);
   //assigning scene to application
-  //m_scene = scene;
+  return scene;
 }
-
+  // dont know why - but cant be initialozed as member so this is an ugly way around that
+  static scene_graph SCENE = sceneSetup();
 
 void ApplicationSolar::render() const {
   /*
@@ -85,26 +87,36 @@ void ApplicationSolar::render() const {
 
   glUseProgram(m_shaders.at("planet").handle);
 
-//  for
-  glm::fmat4 model_matrix = glm::rotate(glm::fmat4{}, float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
-  model_matrix = glm::translate(model_matrix, glm::fvec3{0.0f, 0.0f, -1.0f});
-  glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model_matrix));
+  node* root = SCENE.getRoot();
+  //callen planets
+  int count = 0;
+  SCENE.printGraph();
+  for (node* planet: root->getChildren()){
 
-  // extra matrix for normal transformation to keep them orthogonal to surface
-  glm::fmat4 normal_matrix = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix);
-  glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("NormalMatrix"),
-                     1, GL_FALSE, glm::value_ptr(normal_matrix));
+  std::cout<<count;
+    glm::fmat4 model_matrix = glm::rotate(glm::fmat4{}, 3*float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
+    model_matrix =glm::translate(model_matrix, glm::fvec3{0.0f, (float)count, -1.0f});
+    // extra matrix for normal transformation to keep them orthogonal to surface
+    glm::fmat4 normal_matrix = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix);
+    glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("NormalMatrix"),
+                       1, GL_FALSE, glm::value_ptr(normal_matrix));
 
-  // bind the VAO to draw
-  glBindVertexArray(planet_object.vertex_AO);
+    // bind the VAO to draw
+    glBindVertexArray(planet_object.vertex_AO);
 
-  // draw bound vertex array using bound shader
-  glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);
+    // draw bound vertex array using bound shader
+    glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);
+    count++;
+  }
 
-////
+/*
+  //rotation
+  glm::fmat4 model_matrix2 = glm::rotate(glm::fmat4{}, 3*float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
 
-  glm::fmat4 model_matrix2 = glm::rotate(glm::fmat4{}, float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
-  model_matrix2 = glm::translate(model_matrix2, glm::fvec3{0.0f, 0.0f, -2.0f});
+  //radius
+  model_matrix2 = glm::translate(model_matrix2*model_matrix, glm::fvec3{0.0f, 4.0f, -1.0f});
+  //scale 
+  model_matrix2 = glm::scale(model_matrix2,glm::fvec3{0.5f, 0.5f, 0.5f});
   glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model_matrix2));
 
   // extra matrix for normal transformation to keep them orthogonal to surface
@@ -116,7 +128,7 @@ void ApplicationSolar::render() const {
   glBindVertexArray(planet_object.vertex_AO);
 
   // draw bound vertex array using bound shader
-  glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);
+  glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);*/
 }
 
 void ApplicationSolar::uploadView() {

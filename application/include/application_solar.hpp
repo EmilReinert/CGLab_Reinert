@@ -27,8 +27,6 @@ class ApplicationSolar : public Application {
 
   //////SCENE-SETUP here!! //////////////
   void sceneSetup();
-  //holds scene
-  //scene_graph m_scene;
 
  protected:
   void initializeShaderPrograms();

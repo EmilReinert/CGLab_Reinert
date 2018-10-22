@@ -20,12 +20,27 @@ using namespace gl;
 #include <iostream>
 #include "scene_graph.hpp"
 	scene_graph::scene_graph(){}
+	scene_graph::scene_graph(std::string name):m_name{name}{}
 	scene_graph::~scene_graph(){}
 	//get-set string name of scene graph
-	std::string scene_graph::getName(){}
-	void scene_graph::setName(std::string newname){}
+	std::string scene_graph::getName(){return m_name;}
+	void scene_graph::setName(std::string newname){
+		m_name = newname;
+	}
 	//get-set root node
-	node scene_graph::getRoot() const{}
-	void scene_graph::setRoot(node const& newroot){}
+	node* scene_graph::getRoot(){return m_root_node;}
+	void scene_graph::setRoot(node& newroot){
+		m_root_node = &newroot;
+	}
 	//prints names of all children in graph
-	void scene_graph::printGraph(){}
+	void scene_graph::printGraph(){
+		if(m_root_node!=NULL){
+			printf("----------------printing Graph----------------\n");
+			std::cout<<m_root_node->getName()<<std::endl;
+			m_root_node->printGraph();
+			printf("----------------------------------------------\n");
+		}
+		else{
+			std::cout<<"there is no graph to print"<<std::endl;
+		}
+	}

@@ -18,9 +18,10 @@ using namespace gl;
 #include <iostream>
 
 
-class camera_node:node{
+class camera_node: public node{
  public:
 	camera_node();
+	camera_node(std::string name);
 	~camera_node();
 		//return perspective
 	bool getPerspective();

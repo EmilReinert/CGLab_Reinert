@@ -20,10 +20,13 @@ using namespace gl;
 #include <iostream>
 #include "geometry_node.hpp"
 
-	geometry_node::geometry_node(){}
+	geometry_node::geometry_node(){}	
+	geometry_node::geometry_node(std::string name):node{name}{}
 	geometry_node::~geometry_node(){}
 
 	//get-set for geometry model
-	model geometry_node::getGeometry(){}
-	void geometry_node::setGeometry(model const& newgeometry){}
+	model* geometry_node::getGeometry(){return geometry;}
+	void geometry_node::setGeometry(model& newgeometry){
+		geometry = &newgeometry;
+	}
 

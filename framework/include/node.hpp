@@ -26,14 +26,15 @@ using namespace gl;
 class node{
  public:
 	node();
+	node(std::string name);
 	virtual ~node();
 	//get-set parent node
-	node getParent()const;
-	void setParent(node const& newparent);
+	node* getParent()const;
+	void setParent(node& newparent);
 	//returns child with specific name
-	node getChild(std::string child_name);
+	node* getChild(std::string child_name);
 	//returns vector of all children
-	std::vector<node> getChildren();
+	std::vector<node*> getChildren();
 	//getters
 	std::string getName();
 	std::string getPath();
@@ -44,18 +45,20 @@ class node{
 	void setLocalTransform(glm::fmat4 trans_mat);
 	void setWorldTransform(glm::fmat4 trans_mat);
 	//adding children
-	void addChild(node const& newchild);
+	void addChild(node& newchild);
 	//removing children
 	void removeChild(std::string name);
+	//recursive breath tree analysis
+	void printGraph();
 
- protected:
- 	node* parent;
- 	std::vector<node> children;
+ 	std::vector<node*> children;
+ protected: 	
+ 	node* parent; 	
  	std::string name;
  	std::string path;
- 	int depth;
+ 	int depth=0;
  	glm::fmat4 localTransform;
- 	glm::fmat4 woldTransform;
+ 	glm::fmat4 worldTransform;
 
 };
 #endif

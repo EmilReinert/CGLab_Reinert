@@ -13,19 +13,20 @@
 class scene_graph
 {
  public:
-	scene_graph();
+	scene_graph();	
+	scene_graph(std::string name);
 	~scene_graph();
 	//get-set string name of scene graph
 	std::string getName();
 	void setName(std::string newname);
 	//get-set root node
-	node getRoot() const;
-	void setRoot(node const& newroot);
+	node* getRoot();
+	void setRoot(node & newroot);
 	//prints names of all children in graph
 	void printGraph();
 
  protected:
  	std::string m_name;
- 	node m_root_node;
+ 	node* m_root_node;
 };
 #endif

@@ -18,14 +18,15 @@ using namespace gl;
 #include <iostream>
 
 
-class geometry_node:node{
+class geometry_node: public node{
  public:
-	geometry_node();
+	geometry_node();	
+	geometry_node(std::string name);
 	~geometry_node();
 
 	//get-set for geometry model
-	model getGeometry();
-	void setGeometry(model const& newgeometry);
+	model* getGeometry();
+	void setGeometry(model& newgeometry);
 	
  protected:
 	model* geometry;

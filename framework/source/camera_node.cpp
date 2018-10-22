@@ -21,13 +21,18 @@ using namespace gl;
 #include "camera_node.hpp"
 
 	camera_node::camera_node(){}
+	camera_node::camera_node(std::string name):node{name}{}
 	camera_node::~camera_node(){}
 
 		//return perspective
-	bool camera_node::getPerspective(){}
+	bool camera_node::getPerspective(){return isPerspective;}
 	//get-set if enabled
-	bool camera_node::getEnabled(){}
-	void camera_node::setEnabled(bool b){}
+	bool camera_node::getEnabled(){return isEnabled;}
+	void camera_node::setEnabled(bool b){
+		isEnabled = b;
+	}
 	//get-set PojectionMatrix
-	glm::fmat4 camera_node::getProjectionMatrix(){}
-	void camera_node::setProjectionMatrix(glm::fmat4 newprojection){}
+	glm::fmat4 camera_node::getProjectionMatrix(){return projectionMatrix;}
+	void camera_node::setProjectionMatrix(glm::fmat4 newprojection){
+		projectionMatrix = newprojection;
+	}

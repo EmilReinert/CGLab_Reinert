@@ -30,7 +30,7 @@ using namespace gl;
 		m_name = newname;
 	}
 	//get-set root node
-	node* scene_graph::getRoot(){return m_root_node;}
+	node* scene_graph::getRoot()const{return m_root_node;}
 	void scene_graph::setRoot(node& newroot){
 		m_root_node = &newroot;
 	}

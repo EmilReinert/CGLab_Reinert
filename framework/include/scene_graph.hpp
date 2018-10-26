@@ -21,7 +21,7 @@ class scene_graph
 	std::string getName();
 	void setName(std::string newname);
 	//get-set root node
-	node* getRoot();
+	node* getRoot() const;
 	void setRoot(node & newroot);
 	//prints names of all children in graph
 	void printGraph();

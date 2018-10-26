@@ -59,6 +59,7 @@ ApplicationSolar::~ApplicationSolar() {
   jupiter.addChild(j_moon_1); 
   jupiter.addChild(j_moon_2);
   earth.addChild(e_moon);
+  m_scene_graph=scene;
   return scene;
 }
 
@@ -84,10 +85,11 @@ void ApplicationSolar::render() const {
     // bind shader to upload uniforms
 
   glUseProgram(m_shaders.at("planet").handle);
-  scene_graph sg = m_scene_graph;
-  node* root = sg.getRoot();
+
+  node* root = m_scene_graph.getRoot();
   //would print name 'solarSystem'
-  std::cout<<root->getName();
+
+  //std::cout<<&root;
   //calling planets
   int count = 0;
   for (node* planet: root->getChildren()){

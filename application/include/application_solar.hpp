@@ -26,7 +26,7 @@ class ApplicationSolar : public Application {
   void render() const;
 
   //////SCENE-SETUP here!! //////////////
-  void sceneSetup();
+  scene_graph sceneSetup();
 
  protected:
   void initializeShaderPrograms();
@@ -40,6 +40,9 @@ class ApplicationSolar : public Application {
 
   // cpu representation of model
   model_object planet_object;
+
+  // scene graph as member
+  scene_graph m_scene_graph;
 
   // camera transform matrix
   glm::fmat4 m_view_transform;

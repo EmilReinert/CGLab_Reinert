@@ -24,7 +24,8 @@ using namespace gl;
 
 ApplicationSolar::ApplicationSolar(std::string const& resource_path)
  :Application{resource_path}
- ,planet_object{}
+ ,planet_object{} 
+ ,m_scene_graph{sceneSetup()}
  ,m_view_transform{glm::translate(glm::fmat4{}, glm::fvec3{0.0f, 0.0f, 4.0f})}
  ,m_view_projection{utils::calculate_projection_matrix(initial_aspect_ratio)}
 {
@@ -40,7 +41,7 @@ ApplicationSolar::~ApplicationSolar() {
 
 ///SCENE SETUP
 
-  static scene_graph sceneSetup(){
+  scene_graph ApplicationSolar::sceneSetup(){
   scene_graph scene = scene_graph{"scene"};
   //creating singualar nodes
   node system = node{"solarSystem"};
@@ -58,11 +59,8 @@ ApplicationSolar::~ApplicationSolar() {
   jupiter.addChild(j_moon_1); 
   jupiter.addChild(j_moon_2);
   earth.addChild(e_moon);
-  //assigning scene to application
   return scene;
 }
-  // dont know why - but cant be initialozed as member so this is an ugly way around that
-  static scene_graph SCENE = sceneSetup();
 
 void ApplicationSolar::render() const {
   /*
@@ -86,14 +84,14 @@ void ApplicationSolar::render() const {
     // bind shader to upload uniforms
 
   glUseProgram(m_shaders.at("planet").handle);
-
-  node* root = SCENE.getRoot();
-  //callen planets
+  scene_graph sg = m_scene_graph;
+  node* root = sg.getRoot();
+  //would print name 'solarSystem'
+  std::cout<<root->getName();
+  //calling planets
   int count = 0;
-  SCENE.printGraph();
   for (node* planet: root->getChildren()){
-
-  std::cout<<count;
+    std::cout<<count;
     glm::fmat4 model_matrix = glm::rotate(glm::fmat4{}, 3*float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
     model_matrix =glm::translate(model_matrix, glm::fvec3{0.0f, (float)count, -1.0f});
     // extra matrix for normal transformation to keep them orthogonal to surface

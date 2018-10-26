@@ -1,4 +1,3 @@
-#include "application_solar.hpp"
 #include "window_handler.hpp"
 
 #include "utils.hpp"

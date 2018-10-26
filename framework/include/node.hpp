@@ -3,7 +3,6 @@
 
 #include <map>
 #include <vector>
-#include "application_solar.hpp"
 #include "window_handler.hpp"
 #include "structs.hpp"
 #include "utils.hpp"

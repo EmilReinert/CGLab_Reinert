@@ -79,15 +79,18 @@ using namespace gl;
 	//calculates and assigns world transfomation first
 	glm::fmat4 node::getWorldTransform(){
 		//calculate worldTransfromation
+		std::cout<<"hi";
 		glm::fmat4 worldholder;
 		if(parent== NULL){
+			std::cout<<"hi1";
 			return worldTransform = getLocalTransform();
 		}
 		else{
+			std::cout<<"hi2";
 			return worldTransform = getLocalTransform()*parent->getWorldTransform();
 		}
 		//assign worldtransformation
-
+		std::cout<<"hi3";
 		//return 
 		return worldTransform;
 	}

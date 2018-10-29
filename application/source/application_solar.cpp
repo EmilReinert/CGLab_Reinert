@@ -143,11 +143,12 @@ void ApplicationSolar::render() const {
   //calling planets
   int count = 0;
   for (node* planet: root->getChildren()){
-    std::cout<<planet->getName()<<std::endl;
-    std::cout<<to_string(planet->getWorldTransform())<<std::endl;
+    std::cout<<planet->getName()<<" ";
+    if(planet->getWorldTransform()){std::cout<<to_string(planet->getWorldTransform())<<std::endl;}
+    else {std::cout<<"hi";}
     // dont forget to randomize the rotation speed
   glm::fmat4 model_matrix = glm::rotate(glm::fmat4{}, float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
-  //model_matrix = model_matrix*planet->getWorldTransform();
+  model_matrix = model_matrix*planet->getWorldTransform();
   glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"),
                      1, GL_FALSE, glm::value_ptr(model_matrix));
 

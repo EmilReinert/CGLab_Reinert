@@ -19,8 +19,13 @@ using namespace gl;
 #include <iostream>
 #include "node.hpp"
 
-	node::node(){}
-	node::node(std::string name):name{name}{}
+	node::node():
+		localTransform{glm::fmat4()}
+		,worldTransform{glm::fmat4()}{}
+	node::node(std::string name):
+		name{name}
+		,localTransform{glm::fmat4()}
+		,worldTransform{glm::fmat4()}{}
 	node::~node(){}
 
 //get-set parent node

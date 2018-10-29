@@ -35,7 +35,7 @@ using namespace gl;
 		m_root_node = &newroot;
 	}
 	//prints names of all children in graph
-	void scene_graph::printGraph(){
+	void scene_graph::printGraph()const{
 		if(m_root_node!=NULL){
 			printf("----------------printing Graph----------------\n");
 			std::cout<<m_root_node->getName()<<std::endl;

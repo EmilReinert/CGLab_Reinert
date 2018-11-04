@@ -66,9 +66,11 @@ int main(int argc, char* argv[]) {
 
 //further matrix calculation work
 
-  for (node* planet: root->getChildren()){
-    std::cout<<planet->getName()<<" ";
-    cout<<to_string(planet->getWorldTransform())<<endl;
+  scene_graph scene1 = scene_graph("scene1");
+  vector<node*> children = scene1.getRoot()->getChildren();
+  int count = 0;
+  for(node* child: children){
+    cout<<count++;
   }
 
 }

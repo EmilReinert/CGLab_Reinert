@@ -51,7 +51,7 @@ using namespace gl;
 //returns vector of all children
 	std::vector<node*> node::getChildren(){return children;}
 //getters
-	std::string node::getName(){return name;}
+	std::string node::getName()const{return name;}
 	//path calculated by looking at earlier parents	
 	std::string node::getPath(){
 		//calculating and assigning path
@@ -120,7 +120,7 @@ using namespace gl;
 		printf("no child with given name\n");
 	}
 //recursive breath tree analysis
-	void node::printGraph(){
+	void node::printGraph()const{
 		//test if it has children
 		if(!children.empty()){
 			for(node* child: children){
@@ -134,4 +134,14 @@ using namespace gl;
 		else
 			return;
 	}
+
+	float node::getDistance()const{return distance;}
+	float node::getSize()const{return size;}
+	float node::getRotation()const{return rotation;}
+	int node::getSpeed()const{return speed;}
+
+	void node::setDistance(float dis){distance = dis;}
+	void node::setSize(float siz){size = siz;}
+	void node::setRotation(float rot){rotation = rot;}
+	void node::setSpeed(int spe){speed = spe;}
 

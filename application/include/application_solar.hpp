@@ -26,7 +26,11 @@ class ApplicationSolar : public Application {
   void render() const;
 
   //////SCENE-SETUP here!! //////////////
-  scene_graph sceneSetup();
+  void sceneSetup();
+  void setScene(scene_graph & scene);
+
+  scene_graph* getScene()const;
+  std::vector<node*> m_planets;
 
  protected:
   void initializeShaderPrograms();
@@ -42,7 +46,7 @@ class ApplicationSolar : public Application {
   model_object planet_object;
 
   // scene graph as member
-  scene_graph m_scene_graph;
+  scene_graph *m_scene_graph;
 
   // camera transform matrix
   glm::fmat4 m_view_transform;

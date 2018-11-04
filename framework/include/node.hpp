@@ -35,7 +35,7 @@ class node{
 	//returns vector of all children
 	std::vector<node*> getChildren();
 	//getters
-	std::string getName();
+	std::string getName()const;
 	std::string getPath();
 	int getDepth();
 	//get-set for Transformation
@@ -48,9 +48,24 @@ class node{
 	//removing children
 	void removeChild(std::string name);
 	//recursive breath tree analysis
-	void printGraph();
+	void printGraph()const;
+
+
+	float getDistance()const;
+	float getSize()const;
+	float getRotation()const;
+	int getSpeed()const;
+
+	void setDistance(float dis);
+	void setSize(float siz);
+	void setRotation(float rot);
+	void setSpeed(int spe);
 
  	std::vector<node*> children;
+
+
+	
+
  protected: 	
  	node* parent; 	
  	std::string name;
@@ -58,6 +73,12 @@ class node{
  	int depth=0;
  	glm::fmat4 localTransform;
  	glm::fmat4 worldTransform;
+
+
+	float distance = 1;
+	float size = 1;
+	float rotation = 1;
+	int speed = 1;
 
 };
 #endif

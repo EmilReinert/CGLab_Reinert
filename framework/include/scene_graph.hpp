@@ -26,6 +26,8 @@ class scene_graph
 	//prints names of all children in graph
 	void printGraph()const;
 
+	void rootSetup();
+
  protected:
  	std::string m_name;
  	node* m_root_node;

@@ -25,9 +25,9 @@ class geometry_node: public node{
 	~geometry_node();
 
 	//get-set for geometry model
-	model* getGeometry();
+	model* getGeometry() const;
 	void setGeometry(model& newgeometry);
-	
+
  protected:
 	model* geometry;
 };

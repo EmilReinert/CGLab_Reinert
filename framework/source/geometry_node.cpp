@@ -25,7 +25,7 @@ using namespace gl;
 	geometry_node::~geometry_node(){}
 
 	//get-set for geometry model
-	model* geometry_node::getGeometry(){return geometry;}
+	model* geometry_node::getGeometry()const{return geometry;}
 	void geometry_node::setGeometry(model& newgeometry){
 		geometry = &newgeometry;
 	}

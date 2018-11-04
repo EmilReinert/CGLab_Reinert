@@ -47,11 +47,11 @@ using namespace gl;
 	}
 	void scene_graph::rootSetup(){
 
-		//creating singualar nodes
+	  //creating singualar nodes
 	  node system = node{"solarSystem"};
 
 	  geometry_node sun = geometry_node{"sun"};
-	  
+
 	  geometry_node mercury = geometry_node{"mercury"};
 	  mercury.setDistance(2.0f);
 	  mercury.setSize(0.3f);
@@ -108,6 +108,7 @@ using namespace gl;
 	  jupiter.addChild(j_moon_2);
 	  earth.addChild(e_moon);
 
+	  //printing graph and assigning root
 	  system.printGraph();
 	  setRoot(system);
 	  std::cout<<"Scene set up"<<std::endl;

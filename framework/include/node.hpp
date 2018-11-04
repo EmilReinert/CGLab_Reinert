@@ -74,7 +74,7 @@ class node{
  	glm::fmat4 localTransform;
  	glm::fmat4 worldTransform;
 
-
+ 	//assignments for rendering 
 	float distance = 1;
 	float size = 1;
 	float rotation = 1;

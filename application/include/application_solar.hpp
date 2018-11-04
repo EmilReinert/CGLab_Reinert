@@ -25,14 +25,14 @@ class ApplicationSolar : public Application {
   // draw all objects
   void render() const;
   //actuall render for planet loop//for each planet
-  void update_planet(node* Planet, float count)const;
+  void update_planet(node* const Planet, float count)const;
 
   //////SCENE-SETUP here!! //////////////
   void sceneSetup();
   void setScene(scene_graph & scene);
 
+  //retruns pointer of scene
   scene_graph* getScene()const;
-  std::vector<node*> m_planets;
 
  protected:
   void initializeShaderPrograms();
@@ -54,6 +54,9 @@ class ApplicationSolar : public Application {
   glm::fmat4 m_view_transform;
   // camera projection matrix
   glm::fmat4 m_view_projection;
+
+  // holds a vector of the planets
+  std::vector<node*> m_planets;
 
 };
 

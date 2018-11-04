@@ -135,6 +135,8 @@ using namespace gl;
 			return;
 	}
 
+
+	//some rendering getters and setters
 	float node::getDistance()const{return distance;}
 	float node::getSize()const{return size;}
 	float node::getRotation()const{return rotation;}

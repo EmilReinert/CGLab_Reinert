@@ -24,8 +24,11 @@ class ApplicationSolar : public Application {
 
   // draw all objects
   void render() const;
-  //actuall render for planet loop//for each planet
+  //actual render for planet loop//for each planet
   void update_planet(node* const Planet, float count)const;
+
+  //actuall render for planet loop//for each planet
+  void drawStars()const;
 
   //////SCENE-SETUP here!! //////////////
   void sceneSetup();
@@ -37,6 +40,8 @@ class ApplicationSolar : public Application {
  protected:
   void initializeShaderPrograms();
   void initializeGeometry();
+  //initialiting of stars
+  void initializeStars();
   // update uniform values
   void uploadUniforms();
   // upload projection matrix
@@ -44,8 +49,12 @@ class ApplicationSolar : public Application {
   // upload view matrix
   void uploadView();
 
-  // cpu representation of model
+  // cpu representation of models
   model_object planet_object;
+  model_object star_object;
+  
+  // holds random floats for stars
+  std::vector<float> stars;
 
   // scene graph as member
   scene_graph *m_scene_graph;

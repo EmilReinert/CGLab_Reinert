@@ -138,10 +138,10 @@ using namespace gl;
 	float node::getDistance()const{return distance;}
 	float node::getSize()const{return size;}
 	float node::getRotation()const{return rotation;}
-	int node::getSpeed()const{return speed;}
+	float node::getSpeed()const{return speed;}
 
 	void node::setDistance(float dis){distance = dis;}
 	void node::setSize(float siz){size = siz;}
 	void node::setRotation(float rot){rotation = rot;}
-	void node::setSpeed(int spe){speed = spe;}
+	void node::setSpeed(float spe){speed = spe;}
 

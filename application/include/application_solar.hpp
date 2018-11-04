@@ -24,6 +24,8 @@ class ApplicationSolar : public Application {
 
   // draw all objects
   void render() const;
+  //actuall render for planet loop//for each planet
+  void update_planet(node* Planet, float count)const;
 
   //////SCENE-SETUP here!! //////////////
   void sceneSetup();

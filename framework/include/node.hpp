@@ -54,12 +54,12 @@ class node{
 	float getDistance()const;
 	float getSize()const;
 	float getRotation()const;
-	int getSpeed()const;
+	float getSpeed()const;
 
 	void setDistance(float dis);
 	void setSize(float siz);
 	void setRotation(float rot);
-	void setSpeed(int spe);
+	void setSpeed(float spe);
 
  	std::vector<node*> children;
 
@@ -78,7 +78,7 @@ class node{
 	float distance = 1;
 	float size = 1;
 	float rotation = 1;
-	int speed = 1;
+	float speed = 1;
 
 };
 #endif

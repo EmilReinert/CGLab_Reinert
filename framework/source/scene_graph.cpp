@@ -51,7 +51,7 @@ using namespace gl;
 	  node system = node{"solarSystem"};
 
 	  geometry_node sun = geometry_node{"sun"};
-	  sun.setSize(0.0f);
+	  
 	  geometry_node mercury = geometry_node{"mercury"};
 	  mercury.setDistance(2.0f);
 	  mercury.setSize(0.3f);

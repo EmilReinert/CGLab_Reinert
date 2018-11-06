@@ -39,9 +39,14 @@ class ApplicationSolar : public Application {
 
  protected:
   void initializeShaderPrograms();
-  void initializeGeometry();
-  //initialiting of stars
-  void initializeStars();
+
+  //intializing of scene objects
+    //for models
+    void initializeGeometry();
+    //initialiting of stars
+    void initializeStars();
+    //initialiting of stars
+    void initializeOrbits();
   // update uniform values
   void uploadUniforms();
   // upload projection matrix
@@ -49,23 +54,27 @@ class ApplicationSolar : public Application {
   // upload view matrix
   void uploadView();
 
-  // cpu representation of models
-  model_object planet_object;
-  model_object star_object;
-  
-  // holds random floats for stars
-  std::vector<float> stars;
 
   // scene graph as member
   scene_graph *m_scene_graph;
+
+
+  // cpu representation of models
+  model_object planet_object;
+  model_object star_object;
+  model_object orbit_object;
+
+  //holder of special scene objects
+  // holds a vector of the planets
+  std::vector<node*> m_planets;  
+  // holds random floats for stars
+  std::vector<float> stars;
 
   // camera transform matrix
   glm::fmat4 m_view_transform;
   // camera projection matrix
   glm::fmat4 m_view_projection;
 
-  // holds a vector of the planets
-  std::vector<node*> m_planets;
 
 };
 

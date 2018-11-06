@@ -1,0 +1,39 @@
+
+Talking about Interfaces
+-------------------------
+
+Data:
+	- Source Code as files
+	- Load Data
+	- Crawler
+
+Preprocessing PP:
+	PP output
+	- Text (Source code as it is) 
+	- AST
+	Methods
+	- Extracting and flattening AST
+	- Normalization
+	- Serialization
+
+NN-Module:
+	- RNN
+	- Attention
+	- OGNN
+	- ...
+
+Task:
+	- Generates one token
+	- ..
+
+Config:
+	Data -> source code files
+	Poepr -> text
+	NN -> RNN
+	Task -> pred.on
+
+Homework:
++ define interfaces and moduls
++ small presentation
++ what design patterns weve found
++ code patterns/ problems.

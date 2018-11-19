@@ -295,8 +295,8 @@ void ApplicationSolar::initializeGeometry() {
 void ApplicationSolar::initializeStars() {
 
   //filling empty star container
-  for(int i=0; i<100000; i++){
-    stars.push_back(float((rand()%200))-100.0f);
+  for(int i=0; i<6*100000; i++){
+    stars.push_back(float((rand()%200))-50.0f);//change 
   }
   // generate vertex array object
   glGenVertexArrays(1, &star_object.vertex_AO);
@@ -314,12 +314,12 @@ void ApplicationSolar::initializeStars() {
   glEnableVertexAttribArray(0);
   
   // first attribute is 3 floats with no offset & stride  
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*) 0);
 
   // activate second attribute on gpu
   glEnableVertexAttribArray(1);
   // second attribute is 3 floats with no offset & stride  
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*) 3);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 6*sizeof(float), (void*) 3);
 
    // generate generic buffer
   glGenBuffers(1, &star_object.element_BO);
@@ -368,7 +368,7 @@ void ApplicationSolar::initializeOrbits() {
   orbit_object.draw_mode = GL_TRIANGLES;
   // transfer number of indices to model object 
   orbit_object.num_elements = GLsizei(orbit_model.indices.size());
-
+  
 }
 
 

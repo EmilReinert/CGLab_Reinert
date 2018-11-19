@@ -83,11 +83,15 @@ void ApplicationSolar::update_planet(node* const Planet, float count)const{
     // bind shader to upload uniforms
     glUseProgram(m_shaders.at("planet").handle);
 
+    //planet colors
+    float r,g,b;
+
     //rotation
     glm::fmat4 model_matrix2 = glm::rotate(glm::fmat4{}, (1/(count+1))*float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
 
     //in case the current planet is the sun (first element)
     if(count==0.0){
+      r=1.0f;g=0.8f;b=0.3f;
       //radius
       model_matrix2 = glm::translate(model_matrix2*model_matrix2, count*glm::fvec3{0.0f, 0.0f, -1.0f});
     
@@ -97,6 +101,12 @@ void ApplicationSolar::update_planet(node* const Planet, float count)const{
     //other planets
     else
     {
+              //assigning planets color with placeholders r,g,b
+
+
+      r = 1/count;
+      g = ((count*3.0f)/3.5f)-int((count*3.0f)/3.5f);
+      b = ((count*80.0f)/2.5f)-int((count*80.0f)/3.5f);
       //radius
       model_matrix2 = glm::translate(model_matrix2, (count + 5.0f) * glm::fvec3{0.0f, 0.0f, -1.0f});
     
@@ -114,6 +124,14 @@ void ApplicationSolar::update_planet(node* const Planet, float count)const{
 
     // bind the VAO to draw
     glBindVertexArray(planet_object.vertex_AO);
+
+    /*
+    r = float((rand()%200))/200.0f;
+    g = float((rand()%200))/200.0f;
+    b = float((rand()%200))/200.0f;*/
+
+    glUniform3f(m_shaders.at("planet").u_locs.at("PlanetColor"), r, g, b);
+
 
     // draw bound vertex array using bound shader
     glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);
@@ -243,6 +261,7 @@ void ApplicationSolar::initializeShaderPrograms() {
   m_shaders.at("planet").u_locs["ModelMatrix"] = -1;
   m_shaders.at("planet").u_locs["ViewMatrix"] = -1;
   m_shaders.at("planet").u_locs["ProjectionMatrix"] = -1;
+  m_shaders.at("planet").u_locs["PlanetColor"] = -1;
   //for stars
   m_shaders.at("star").u_locs["ModelViewMatrix"] = -1;
   m_shaders.at("star").u_locs["ProjectionMatrix"] = -1;  

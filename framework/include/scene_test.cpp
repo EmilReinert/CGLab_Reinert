@@ -2,6 +2,7 @@
 #define SCENE_TEST_CPP
 #include "scene_graph.hpp"
 #include "glm/ext.hpp"
+#include "glm/gtx/string_cast.hpp"
 #include <iostream>
 using namespace std;
 
@@ -70,8 +71,18 @@ int main(int argc, char* argv[]) {
   vector<node*> children = scene1.getRoot()->getChildren();
   int count = 0;
   for(node* child: children){
-    cout<<count++;
-  }
+    cout<<count++;}
+
+//light node 
+  point_light_node pl1("pointligh1");
+  point_light_node pl2("pointlight2");
+  pl1.setIntensity(1.0f);
+  pl1.setColor(glm::vec3(1.0f,1.0f,1.0f));
+  pl2.setIntensity(0.5f);
+  pl2.setColor(glm::vec3(1.0f,0.0f,0.0f));
+  pl1.print();
+  pl2.print();
+  
 
 }
 

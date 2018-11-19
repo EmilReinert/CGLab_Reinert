@@ -4,6 +4,7 @@
 #include "node.hpp"
 #include "camera_node.hpp"
 #include "geometry_node.hpp"
+#include "point_light_node.hpp"
 
 #include <glm/gtc/type_precision.hpp>
 

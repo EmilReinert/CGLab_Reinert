@@ -61,6 +61,8 @@ class ApplicationSolar : public Application {
 
   // cpu representation of models
   model_object planet_object;
+  // colors of planetes
+  std::vector<glm::vec3> planet_colors;
   model_object star_object;
   model_object orbit_object;
 

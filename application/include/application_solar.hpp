@@ -58,6 +58,8 @@ class ApplicationSolar : public Application {
   // scene graph as member
   scene_graph *m_scene_graph;
 
+  //render mode
+  int render_mode = 1;
 
   // cpu representation of models
   model_object planet_object;

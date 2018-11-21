@@ -22,6 +22,8 @@ using namespace gl;
 #include <vector>
 using namespace std;
 
+const char *modes[] = {"", "planet1", "planet2"};
+
 ApplicationSolar::ApplicationSolar(std::string const &resource_path)
     : Application{resource_path}, planet_object{}, star_object{}, orbit_object{}, m_view_transform{glm::translate(glm::fmat4{}, glm::fvec3{0.0f, 0.0f, 4.0f})}, m_view_projection{utils::calculate_projection_matrix(initial_aspect_ratio)}
 {
@@ -81,11 +83,11 @@ void ApplicationSolar::drawStars() const
 void ApplicationSolar::update_planet(node *const Planet, float count) const
 {
   // bind shader to upload uniforms
-  glUseProgram(m_shaders.at("planet").handle);
+  glUseProgram(m_shaders.at(modes[render_mode]).handle);
 
   //planet color
   glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f);
-  color =  planet_colors[count];
+  color = planet_colors[count];
   //rotation
   glm::fmat4 model_matrix2 = glm::rotate(glm::fmat4{}, (1 / (count + 1)) * float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
 
@@ -105,25 +107,25 @@ void ApplicationSolar::update_planet(node *const Planet, float count) const
   else
   {
     //radius
-    model_matrix2 = glm::translate(model_matrix2, (count ) * glm::fvec3{0.0f, 0.0f, -1.0f});
+    model_matrix2 = glm::translate(model_matrix2, (count)*glm::fvec3{0.0f, 0.0f, -1.0f});
 
     //scale
     model_matrix2 = glm::scale(model_matrix2, 0.3f * glm::fvec3{(1 / count), (1 / count), (1 / count)});
   }
 
   glm::fmat4 model_matrix2cop = model_matrix2;
-  glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model_matrix2));
+  glUniformMatrix4fv(m_shaders.at(modes[render_mode]).u_locs.at("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model_matrix2));
 
   // extra matrix for normal transformation to keep them orthogonal to surface
   glm::fmat4 normal_matrix2 = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix2);
-  glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("NormalMatrix"),
+  glUniformMatrix4fv(m_shaders.at(modes[render_mode]).u_locs.at("NormalMatrix"),
                      1, GL_FALSE, glm::value_ptr(normal_matrix2));
 
   // bind the VAO to draw
   glBindVertexArray(planet_object.vertex_AO);
 
   // send colors to Shader
-  glUniform3f(m_shaders.at("planet").u_locs.at("PlanetColor"), color.x, color.y, color.z);
+  glUniform3f(m_shaders.at(modes[render_mode]).u_locs.at("PlanetColor"), color.x, color.y, color.z);
 
   // draw bound vertex array using bound shader
   glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);
@@ -138,11 +140,11 @@ void ApplicationSolar::update_planet(node *const Planet, float count) const
   //scale
   model_matrix = glm::scale(model_matrix, 0.1f * glm::fvec3{count, count, count});
 
-  glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model_matrix));
+  glUniformMatrix4fv(m_shaders.at(modes[render_mode]).u_locs.at("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model_matrix));
 
   // extra matrix for normal transformation to keep them orthogonal to surface
   glm::fmat4 normal_matrix = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix);
-  glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("NormalMatrix"),
+  glUniformMatrix4fv(m_shaders.at(modes[render_mode]).u_locs.at("NormalMatrix"),
                      1, GL_FALSE, glm::value_ptr(normal_matrix));
 
   // bind the VAO to draw
@@ -173,8 +175,11 @@ void ApplicationSolar::uploadView()
   // vertices are transformed in camera space, so camera transform must be inverted
   glm::fmat4 view_matrix = glm::inverse(m_view_transform);
   // upload matrix to gpu
-  glUseProgram(m_shaders.at("planet").handle);
-  glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ViewMatrix"),
+  glUseProgram(m_shaders.at("planet1").handle);
+  glUniformMatrix4fv(m_shaders.at("planet1").u_locs.at("ViewMatrix"),
+                     1, GL_FALSE, glm::value_ptr(view_matrix));
+  glUseProgram(m_shaders.at("planet2").handle);
+  glUniformMatrix4fv(m_shaders.at("planet2").u_locs.at("ViewMatrix"),
                      1, GL_FALSE, glm::value_ptr(view_matrix));
   glUseProgram(m_shaders.at("star").handle);
   glUniformMatrix4fv(m_shaders.at("star").u_locs.at("ModelViewMatrix"),
@@ -187,8 +192,12 @@ void ApplicationSolar::uploadView()
 void ApplicationSolar::uploadProjection()
 {
   // upload matrix to gpu
-  glUseProgram(m_shaders.at("planet").handle);
-  glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ProjectionMatrix"),
+  glUseProgram(m_shaders.at("planet1").handle);
+  glUniformMatrix4fv(m_shaders.at("planet1").u_locs.at("ProjectionMatrix"),
+                     1, GL_FALSE, glm::value_ptr(m_view_projection));
+  //planet mode 2
+  glUseProgram(m_shaders.at("planet2").handle);
+  glUniformMatrix4fv(m_shaders.at("planet2").u_locs.at("ProjectionMatrix"),
                      1, GL_FALSE, glm::value_ptr(m_view_projection));
   glUseProgram(m_shaders.at("star").handle);
   glUniformMatrix4fv(m_shaders.at("star").u_locs.at("ProjectionMatrix"),
@@ -213,20 +222,28 @@ void ApplicationSolar::uploadUniforms()
 void ApplicationSolar::initializeShaderPrograms()
 {
   // store shader program objects in container
-  m_shaders.emplace("planet", shader_program{{{GL_VERTEX_SHADER, m_resource_path + "shaders/planet.vert"},
-                                              {GL_FRAGMENT_SHADER, m_resource_path + "shaders/planet.frag"}}});
+  m_shaders.emplace("planet1", shader_program{{{GL_VERTEX_SHADER, m_resource_path + "shaders/planet.vert"},
+                                               {GL_FRAGMENT_SHADER, m_resource_path + "shaders/planet.frag"}}});
+  m_shaders.emplace("planet2", shader_program{{{GL_VERTEX_SHADER, m_resource_path + "shaders/planet_cel.vert"},
+                                               {GL_FRAGMENT_SHADER, m_resource_path + "shaders/planet_cel.frag"}}});
   m_shaders.emplace("star", shader_program{{{GL_VERTEX_SHADER, m_resource_path + "shaders/vao.vert"},
                                             {GL_FRAGMENT_SHADER, m_resource_path + "shaders/vao.frag"}}});
   m_shaders.emplace("orbit", shader_program{{{GL_VERTEX_SHADER, m_resource_path + "shaders/orbit.vert"},
                                              {GL_FRAGMENT_SHADER, m_resource_path + "shaders/orbit.frag"}}});
 
   // request uniform locations for shader program
-  //for planets
-  m_shaders.at("planet").u_locs["NormalMatrix"] = -1;
-  m_shaders.at("planet").u_locs["ModelMatrix"] = -1;
-  m_shaders.at("planet").u_locs["ViewMatrix"] = -1;
-  m_shaders.at("planet").u_locs["ProjectionMatrix"] = -1;
-  m_shaders.at("planet").u_locs["PlanetColor"] = -1;
+  //for planets rendermode 1
+  m_shaders.at("planet1").u_locs["NormalMatrix"] = -1;
+  m_shaders.at("planet1").u_locs["ModelMatrix"] = -1;
+  m_shaders.at("planet1").u_locs["ViewMatrix"] = -1;
+  m_shaders.at("planet1").u_locs["ProjectionMatrix"] = -1;
+  m_shaders.at("planet1").u_locs["PlanetColor"] = -1;
+  //render mode 2
+  m_shaders.at("planet2").u_locs["NormalMatrix"] = -1;
+  m_shaders.at("planet2").u_locs["ModelMatrix"] = -1;
+  m_shaders.at("planet2").u_locs["ViewMatrix"] = -1;
+  m_shaders.at("planet2").u_locs["ProjectionMatrix"] = -1;
+  m_shaders.at("planet2").u_locs["PlanetColor"] = -1;
   // for stars
   m_shaders.at("star").u_locs["ModelViewMatrix"] = -1;
   m_shaders.at("star").u_locs["ProjectionMatrix"] = -1;
@@ -241,13 +258,13 @@ void ApplicationSolar::initializeGeometry()
 {
 
   // filling planet colors with random values
-  float r,g,b;
+  float r, g, b;
   for (int i = 0; i < 10; i++)
   {
     r = float((rand() % 200)) - 50.0f;
     g = float((rand() % 200)) - 50.0f;
     b = float((rand() % 200)) - 50.0f;
-    planet_colors.push_back(glm::vec3(r,g,b)); //change
+    planet_colors.push_back(glm::vec3(r, g, b)); //change
   }
 
   model planet_model = model_loader::obj(m_resource_path + "models/sphere.obj", model::NORMAL);
@@ -396,10 +413,20 @@ void ApplicationSolar::keyCallback(int key, int action, int mods)
     m_view_transform = glm::translate(m_view_transform, glm::fvec3{0.0f, 0.1f, -0.0f});
     uploadView();
   }
-  else if (key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT))
+  if (key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT))
   {
     m_view_transform = glm::translate(m_view_transform, glm::fvec3{0.0f, 0.0f, 0.1f});
     uploadView();
+  }
+  if (key == GLFW_KEY_1 && (action == GLFW_PRESS || action == GLFW_REPEAT))
+  {
+    render_mode = 1;
+    std::cout << "switching to render mode " << render_mode << std::endl;
+  }
+  if (key == GLFW_KEY_2 && (action == GLFW_PRESS || action == GLFW_REPEAT))
+  {
+    render_mode = 2;
+    std::cout << "switching to render mode " << render_mode << std::endl;
   }
 }
 

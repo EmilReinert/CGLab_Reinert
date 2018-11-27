@@ -13,7 +13,8 @@ const vec3 lightColor = vec3(1.0f,1.0f,1.0f);
 const float gloss = 15.0f;
 const float screenGamma = 1.5;
 
-void main() {  //comment!
+void main() {  
+  //dot product for less buggy calculation
   vec3 normal = normalize(pass_Normal);
   vec3 reflect_dir = normalize(reflect(camPosition, normal));
   float cam_to_mirror_distance =length(reflect_dir-camPosition);
@@ -22,7 +23,7 @@ void main() {  //comment!
     intensity = 1.0f;
   }  
   else{
-    float intensity = 0.1f;
+    float intensity = 0.0f;
   }
   out_Color = vec4(normalize(pass_Color)*intensity, 1.0);
 }

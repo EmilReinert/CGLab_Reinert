@@ -261,9 +261,9 @@ void ApplicationSolar::initializeGeometry()
   float r, g, b;
   for (int i = 0; i < 10; i++)
   {
-    r = float((rand() % 200)) - 50.0f;
-    g = float((rand() % 200)) - 50.0f;
-    b = float((rand() % 200)) - 50.0f;
+    r = float((rand() % 255)) / 255.0f;
+    g = float((rand() % 255)) / 255.0f;
+    b = float((rand() % 255)) / 255.0f;
     planet_colors.push_back(glm::vec3(r, g, b)); //change
   }
 

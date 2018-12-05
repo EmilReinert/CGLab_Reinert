@@ -3,7 +3,12 @@ in  vec3 vertexPosition;
 in  vec3 pass_Normal;
 in  vec3 pass_Color;
 in  vec3 camPosition;
+in  vec2 pass_TexCoord;
+
+
 out vec4 out_Color;
+
+uniform sampler2D PlanetTexture;
 
 vec3 ambientColor;
 const vec3 lightPosition = vec3(0.0f,0.0f,0.0f);
@@ -13,11 +18,13 @@ const float gloss = 4.0f;
 const float screenGamma = 1.5;
 
 void main() {
-  ambientColor = pass_Color * 0.05;
+  // TODO setting new color based on texture
+  vec3 color = 100000000*vec3(texture(PlanetTexture, pass_TexCoord)).xyz;
+  ambientColor = color * 0.05;
   //comment!
   vec3 normal = normalize(pass_Normal);
   vec3 lightDirection = lightPosition - vertexPosition;
-  float distance = length(lightDirection) * length(lightDirection);
+  float distance = length(lightDirection);
   lightDirection = normalize(lightDirection);
   float lambertiano = max(dot(lightDirection, normal), 0.0);
   float specular = 0.0;
@@ -29,7 +36,7 @@ void main() {
   specular = pow(specularAngle, 4.0*gloss);
   vec3 colorLinear = 
     ambientColor + 
-    pass_Color*lambertiano*lightColor*lightIntensity/distance +
+    color*lambertiano*lightColor*lightIntensity/distance +
     vec3(1.0, 1.0, 1.0)*specular*lightColor*lightIntensity/distance;
   
   //gamma adjusting

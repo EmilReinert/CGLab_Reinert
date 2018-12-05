@@ -9,12 +9,13 @@ uniform mat4 ViewMatrix;
 smooth out vec3 eyeDirection;
 
 void main() {
-  // from here:
-  // https://gamedev.stackexchange.com/questions/60313/implementing-a-skybox-with-glsl-version-330
-
+  // calculating eyeDIrection and gl Position
   mat4 inverseProjection = inverse(ProjectionMatrix);
   mat3 inverseModelview  = transpose(mat3(ViewMatrix));
   vec3 unprojected       = (inverseProjection * in_Position).xyz;
   eyeDirection           = inverseModelview * unprojected;
   gl_Position            = in_Position;
+
+
+  // https://gamedev.stackexchange.com/questions/60313/implementing-a-skybox-with-glsl-version-330
 }

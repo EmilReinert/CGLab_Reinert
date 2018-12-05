@@ -52,7 +52,8 @@ ApplicationSolar::~ApplicationSolar()
   glDeleteBuffers(1, &star_object.element_BO);
   glDeleteVertexArrays(1, &star_object.vertex_AO);
   glDeleteTextures(1, &skybox_texture.handle);
-  for (unsigned int i = 0; i < textures.size(); ++i){
+  for (unsigned int i = 0; i < textures.size(); ++i)
+  {
     glDeleteTextures(1, &textures[i].handle);
   }
 }
@@ -247,7 +248,7 @@ void ApplicationSolar::initializeShaderPrograms()
   m_shaders.emplace("orbit", shader_program{{{GL_VERTEX_SHADER, m_resource_path + "shaders/orbit.vert"},
                                              {GL_FRAGMENT_SHADER, m_resource_path + "shaders/orbit.frag"}}});
   m_shaders.emplace("skybox", shader_program{{{GL_VERTEX_SHADER, m_resource_path + "shaders/skybox.vert"},
-                                             {GL_FRAGMENT_SHADER, m_resource_path + "shaders/skybox.frag"}}});
+                                              {GL_FRAGMENT_SHADER, m_resource_path + "shaders/skybox.frag"}}});
   // request uniform locations for shader program
   //for planets rendermode 1
   m_shaders.at("planet1").u_locs["NormalMatrix"] = -1;
@@ -289,7 +290,7 @@ void ApplicationSolar::initializeGeometry()
     planet_colors.push_back(glm::vec3(r, g, b)); //change
   }
 
-  model planet_model = model_loader::obj(m_resource_path + "models/sphere.obj", model::NORMAL);
+  model planet_model = model_loader::obj(m_resource_path + "models/sphere.obj", model::NORMAL | model::TEXCOORD);
   model skybox_model = model_loader::obj(m_resource_path + "models/skybox.obj");
   // generate vertex array object
   glGenVertexArrays(1, &planet_object.vertex_AO);
@@ -453,18 +454,17 @@ void ApplicationSolar::initializeTextures()
   for (uint i = 0; i < texture_images.size(); i++)
   {
     texture_object t;
-    textures.push_back(t);
     auto image = texture_images[i];
     glActiveTexture(GL_TEXTURE0);
     glGenTextures(1, &t.handle);
     glBindTexture(GL_TEXTURE_2D, t.handle);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexImage2D(GL_TEXTURE_2D, 0, image.channels, (uint)image.width,
                  (uint)image.height, 0, image.channels, image.channel_type, image.ptr());
     //std::cout<<image.channels<<" "<<image.channel_type<<" "<<(uint)image.width<<" "<<(uint)image.height<<std::endl;
+    //adding texture object to textures
+    textures.push_back(t);
   }
 }
 

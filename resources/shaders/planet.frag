@@ -19,7 +19,7 @@ const float screenGamma = 1.5;
 
 void main() {
   // TODO setting new color based on texture
-  vec3 color = pass_Color;
+  vec3 color = vec3(texture(PlanetTexture, pass_TexCoord));
   ambientColor = color * 0.05;
   //comment!
   vec3 normal = normalize(pass_Normal);
@@ -44,5 +44,5 @@ void main() {
             
             
   out_Color = vec4(colorLinear, 1.0);
-  out_Color = texture(PlanetTexture, pass_TexCoord)+out_Color;
+  //out_Color = texture(PlanetTexture, pass_TexCoord);
 }

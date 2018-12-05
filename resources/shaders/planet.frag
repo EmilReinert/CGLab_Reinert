@@ -7,13 +7,13 @@ out vec4 out_Color;
 
 vec3 ambientColor;
 const vec3 lightPosition = vec3(0.0f,0.0f,0.0f);
-const float lightIntensity = 0.50f;
+const float lightIntensity = 1;
 const vec3 lightColor = vec3(1.0f,1.0f,1.0f);
 const float gloss = 4.0f;
 const float screenGamma = 1.5;
 
 void main() {
-  ambientColor = pass_Color * 0.01;
+  ambientColor = pass_Color * 0.05;
   //comment!
   vec3 normal = normalize(pass_Normal);
   vec3 lightDirection = lightPosition - vertexPosition;

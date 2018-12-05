@@ -32,6 +32,7 @@ ApplicationSolar::ApplicationSolar(std::string const &resource_path)
   initializeStars();
   initializeOrbits();
   initializeShaderPrograms();
+  initializeTextures();
 }
 
 ApplicationSolar::~ApplicationSolar()
@@ -382,6 +383,24 @@ void ApplicationSolar::initializeOrbits()
   orbit_object.draw_mode = GL_TRIANGLES;
   // transfer number of indices to model object
   orbit_object.num_elements = GLsizei(orbit_model.indices.size());
+}
+
+//initializing textures
+void ApplicationSolar::initializeTextures()
+{
+  // loading textures to create a vector of length 10 with right order of planets
+  auto textures_path = m_resource_path + "/textures/";
+  textures.push_back(texture_loader::file(m_resource_path + "sunmap.jpg"));
+  textures.push_back(texture_loader::file(m_resource_path + "mercurymap.jpg"));
+  textures.push_back(texture_loader::file(m_resource_path + "venusmap.jpg"));
+  textures.push_back(texture_loader::file(m_resource_path + "earthmap1k.jpg"));
+  textures.push_back(texture_loader::file(m_resource_path + "mars_1k_color.jpg"));
+  textures.push_back(texture_loader::file(m_resource_path + "jupitermap.jpg"));
+  textures.push_back(texture_loader::file(m_resource_path + "saturnmap.jpg"));
+  textures.push_back(texture_loader::file(m_resource_path + "uranusmap.jpg"));
+  textures.push_back(texture_loader::file(m_resource_path + "neptunemap.jpg"));
+  textures.push_back(texture_loader::file(m_resource_path + "plutomap1k.jpg"));
+
 }
 
 ///////////////////////////// callback functions for window events ////////////

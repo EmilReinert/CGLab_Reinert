@@ -68,7 +68,8 @@ protected:
   // colors of planetes
   std::vector<glm::vec3> planet_colors;
   // textures for the planets
-  std::vector<pixel_data> textures;
+  std::vector<texture_object> textures;
+  std::vector<pixel_data> texture_images;
   model_object star_object;
   model_object orbit_object;
 

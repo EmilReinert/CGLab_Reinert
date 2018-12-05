@@ -27,12 +27,12 @@ const char *modes[] = {"", "planet1", "planet2"};
 ApplicationSolar::ApplicationSolar(std::string const &resource_path)
     : Application{resource_path}, planet_object{}, star_object{}, orbit_object{}, m_view_transform{glm::translate(glm::fmat4{}, glm::fvec3{0.0f, 0.0f, 4.0f})}, m_view_projection{utils::calculate_projection_matrix(initial_aspect_ratio)}
 {
+  initializeTextures();
   sceneSetup();
   initializeGeometry();
   initializeStars();
   initializeOrbits();
   initializeShaderPrograms();
-  //initializeTextures();
 }
 
 ApplicationSolar::~ApplicationSolar()
@@ -88,7 +88,7 @@ void ApplicationSolar::update_planet(node *const Planet, float count) const
 
   //planet color
   glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f);
-  color = planet_colors[count];
+  color = planet_colors[(uint)count];
   //rotation
   glm::fmat4 model_matrix2 = glm::rotate(glm::fmat4{}, (1 / (count + 1)) * float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
 
@@ -124,30 +124,22 @@ void ApplicationSolar::update_planet(node *const Planet, float count) const
 
   // bind the VAO to draw
   glBindVertexArray(planet_object.vertex_AO);
-
   // send colors to Shader
   glUniform3f(m_shaders.at(modes[render_mode]).u_locs.at("PlanetColor"), color.x, color.y, color.z);
-
   // draw bound vertex array using bound shader
   glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);
-
   /// adding some moons just for fun
   //rotation
-  glm::fmat4 model_matrix = glm::rotate(glm::fmat4{}, (((int)count % 3) + 1) * (100.0f / (count + 100)) * float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
-
+  glm::fmat4 model_matrix = glm::rotate(glm::fmat4{}, (float)(((uint)count % 3) + 1) * (100.0f / (count + 100)) * float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
   //radius
   model_matrix = glm::translate(model_matrix2 * model_matrix, glm::fvec3{0.0f, 0.0f, -3.0f});
-
   //scale
   model_matrix = glm::scale(model_matrix, 0.1f * glm::fvec3{count, count, count});
-
   glUniformMatrix4fv(m_shaders.at(modes[render_mode]).u_locs.at("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model_matrix));
-
   // extra matrix for normal transformation to keep them orthogonal to surface
   glm::fmat4 normal_matrix = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix);
   glUniformMatrix4fv(m_shaders.at(modes[render_mode]).u_locs.at("NormalMatrix"),
                      1, GL_FALSE, glm::value_ptr(normal_matrix));
-
   // bind the VAO to draw
   glBindVertexArray(planet_object.vertex_AO);
 
@@ -390,17 +382,32 @@ void ApplicationSolar::initializeTextures()
 {
   // loading textures to create a vector of length 10 with right order of planets
   auto textures_path = m_resource_path + "/textures/";
-  textures.push_back(texture_loader::file(m_resource_path + "sunmap.jpg"));
-  textures.push_back(texture_loader::file(m_resource_path + "mercurymap.jpg"));
-  textures.push_back(texture_loader::file(m_resource_path + "venusmap.jpg"));
-  textures.push_back(texture_loader::file(m_resource_path + "earthmap1k.jpg"));
-  textures.push_back(texture_loader::file(m_resource_path + "mars_1k_color.jpg"));
-  textures.push_back(texture_loader::file(m_resource_path + "jupitermap.jpg"));
-  textures.push_back(texture_loader::file(m_resource_path + "saturnmap.jpg"));
-  textures.push_back(texture_loader::file(m_resource_path + "uranusmap.jpg"));
-  textures.push_back(texture_loader::file(m_resource_path + "neptunemap.jpg"));
-  textures.push_back(texture_loader::file(m_resource_path + "plutomap1k.jpg"));
+  texture_images.push_back(texture_loader::file(textures_path + "sunmap.jpg"));
+  texture_images.push_back(texture_loader::file(textures_path + "mercurymap.jpg"));
+  texture_images.push_back(texture_loader::file(textures_path + "venusmap.jpg"));
+  texture_images.push_back(texture_loader::file(textures_path + "earthmap1k.jpg"));
+  texture_images.push_back(texture_loader::file(textures_path + "mars_1k_color.jpg"));
+  texture_images.push_back(texture_loader::file(textures_path + "jupitermap.jpg"));
+  texture_images.push_back(texture_loader::file(textures_path + "saturnmap.jpg"));
+  texture_images.push_back(texture_loader::file(textures_path + "uranusmap.jpg"));
+  texture_images.push_back(texture_loader::file(textures_path + "neptunemap.jpg"));
+  texture_images.push_back(texture_loader::file(textures_path + "plutomap1k.jpg"));
 
+  // actual initializing for each texture
+  for (uint i = 0; i < texture_images.size(); i++)
+  {
+    texture_object t;
+    textures.push_back(t);
+    auto image = texture_images[i];
+    glActiveTexture(GL_TEXTURE0);
+    glGenTextures(1, &t.handle);
+    glBindTexture(GL_TEXTURE_2D, t.handle);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, image.channels, (uint)image.width,
+                 (uint)image.height, 0, image.channels, image.channel_type, image.ptr());
+    //std::cout<<image.channels<<" "<<image.channel_type<<" "<<(uint)image.width<<" "<<(uint)image.height<<std::endl;
+  }
 }
 
 ///////////////////////////// callback functions for window events ////////////

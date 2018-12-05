@@ -20,7 +20,7 @@ const float screenGamma = 1.5;
 void main() {
   // TODO setting new color based on texture
   vec3 color = vec3(texture(PlanetTexture, pass_TexCoord));
-  ambientColor = color * 0.05;
+  ambientColor = color * 0.1;
   //comment!
   vec3 normal = normalize(pass_Normal);
   vec3 lightDirection = lightPosition - vertexPosition;
@@ -36,8 +36,8 @@ void main() {
   specular = pow(specularAngle, 4.0*gloss);
   vec3 colorLinear = 
     ambientColor + 
-    color*lambertiano*lightColor*lightIntensity/distance +
-    vec3(1.0, 1.0, 1.0)*specular*lightColor*lightIntensity/distance;
+    color*lambertiano*lightColor*lightIntensity +
+    vec3(1.0, 1.0, 1.0)*specular*lightColor*lightIntensity;
   
   //gamma adjusting
   colorLinear = pow(colorLinear,vec3(1.0/screenGamma));

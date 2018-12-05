@@ -25,10 +25,9 @@ out vec2 pass_TexCoord;
 void main(void)
 {
 	gl_Position = (ProjectionMatrix  * ViewMatrix * ModelMatrix) * vec4(in_Position, 1.0);
-	//vec4 vertPos4 = ModelMatrix * vec4(in_Position, 1.0);
-	//vertexPosition = vec3(vertPos4) / vertPos4.w;
-	//vertexPosition = vec3(ViewMatrix * vec4(vertexPosition,0.0) ).xyz;
-	vertexPosition = (ModelMatrix*vec4(in_Position,1.0)).xyz;
+	
+	vec4 vertPos4 = ModelMatrix * vec4(in_Position, 1.0);
+	vertexPosition = vec3(vertPos4) / vertPos4.w;
 	//camPosition = vec3(Viewatrix * ModelMatrix * NormalMatrix * vec4(in_Position, 0.0)).xyz;
 	camPosition = (transpose(ViewMatrix)[3] * -1).xyz;
 	pass_Normal = (NormalMatrix * vec4(in_Normal, 0.0)).xyz;

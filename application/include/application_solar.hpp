@@ -30,6 +30,8 @@ public:
 
   //actuall render for planet loop//for each planet
   void drawStars() const;
+  //actual skybox rendering
+  void drawSkybox() const;
 
   //////SCENE-SETUP here!! //////////////
   void sceneSetup();
@@ -44,6 +46,8 @@ protected:
   //intializing of scene objects
   //for models
   void initializeGeometry();
+  //for skybox
+  void initializeSkybox();
   //initialiting of stars
   void initializeStars();
   //initialiting of stars
@@ -65,11 +69,15 @@ protected:
 
   // cpu representation of models
   model_object planet_object;
+  model_object skybox_object;
   // colors of planetes
   std::vector<glm::vec3> planet_colors;
   // textures for the planets
   std::vector<texture_object> textures;
   std::vector<pixel_data> texture_images;
+  //textures for skybox
+  texture_object skybox_texture;
+  std::vector<pixel_data> skybox_images;
   model_object star_object;
   model_object orbit_object;
 

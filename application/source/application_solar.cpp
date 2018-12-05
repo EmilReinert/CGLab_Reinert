@@ -32,7 +32,7 @@ ApplicationSolar::ApplicationSolar(std::string const &resource_path)
   initializeStars();
   initializeOrbits();
   initializeShaderPrograms();
-  initializeTextures();
+  //initializeTextures();
 }
 
 ApplicationSolar::~ApplicationSolar()

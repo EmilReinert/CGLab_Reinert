@@ -16,4 +16,5 @@ void main() {
   eyeDirection = inverseModelview * unprojected;
   gl_Position = in_Position;
   // https://gamedev.stackexchange.com/questions/60313/implementing-a-skybox-with-glsl-version-330
+  // next time, explain differences and why?
 }

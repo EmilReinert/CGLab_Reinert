@@ -54,6 +54,8 @@ protected:
   void initializeOrbits();
   //initializing of the textures
   void initializeTextures();
+  //initializing of framebuffer
+  void initializeFramebuffer();
   // update uniform values
   void uploadUniforms();
   // upload projection matrix
@@ -80,6 +82,12 @@ protected:
   std::vector<pixel_data> skybox_images;
   model_object star_object;
   model_object orbit_object;
+  //framebuffer stuff
+  // texture for framebuffer
+  texture_object fbo_texture;
+  // ojects for render and frame buffer
+  framebuffer_object fbo;
+  renderbuffer_object rbo;
 
   //holder of special scene objects
   // holds a vector of the planets

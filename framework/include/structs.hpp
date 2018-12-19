@@ -3,11 +3,12 @@
 
 #include <map>
 #include <glbinding/gl/gl.h>
-// use gl definitions from glbinding 
+// use gl definitions from glbinding
 using namespace gl;
 
 // gpu representation of model
-struct model_object {
+struct model_object
+{
   // vertex array object
   GLuint vertex_AO = 0;
   // vertex buffer object
@@ -21,7 +22,26 @@ struct model_object {
 };
 
 // gpu representation of texture
-struct texture_object {
+struct texture_object
+{
+  // handle of texture object
+  GLuint handle = 0;
+  // binding point
+  GLenum target = GL_NONE;
+};
+
+// gpu respresnetation of framebuffer
+struct framebuffer_object
+{
+  // handle of texture object
+  GLuint handle = 0;
+  // binding point
+  GLenum target = GL_NONE;
+};
+
+// gpu respresnetation of renderbuffer
+struct renderbuffer_object
+{
   // handle of texture object
   GLuint handle = 0;
   // binding point
@@ -29,11 +49,12 @@ struct texture_object {
 };
 
 // shader handle and uniform storage
-struct shader_program {
+struct shader_program
+{
   shader_program(std::map<GLenum, std::string> paths)
-   :shader_paths{paths}
-   ,handle{0}
-   {}
+      : shader_paths{paths}, handle{0}
+  {
+  }
 
   // paths to shader sources
   std::map<GLenum, std::string> shader_paths;

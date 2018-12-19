@@ -25,10 +25,16 @@ using namespace std;
 const char *modes[] = {"", "planet1", "planet2"};
 
 ApplicationSolar::ApplicationSolar(std::string const &resource_path)
-    : Application{resource_path}, planet_object{}, star_object{}, orbit_object{}, m_view_transform{glm::translate(glm::fmat4{}, glm::fvec3{0.0f, 0.0f, 4.0f})}, m_view_projection{utils::calculate_projection_matrix(initial_aspect_ratio)}
+    : Application{resource_path},
+      planet_object{}, star_object{}, orbit_object{}, fbo{}, rbo{},
+      m_view_transform{glm::translate(glm::fmat4{},
+                                      glm::fvec3{0.0f, 0.0f, 4.0f})},
+      m_view_projection{utils::calculate_projection_matrix(initial_aspect_ratio)}
 {
   initializeTextures();
   std::cout << "initialized textures" << std::endl;
+  initializeFramebuffer();
+  std::cout << "initialized frambugger" << std::endl;
   sceneSetup();
   std::cout << "scene set up" << std::endl;
   initializeGeometry();
@@ -52,6 +58,9 @@ ApplicationSolar::~ApplicationSolar()
   glDeleteBuffers(1, &star_object.element_BO);
   glDeleteVertexArrays(1, &star_object.vertex_AO);
   glDeleteTextures(1, &skybox_texture.handle);
+  glDeleteTextures(1, &fbo_texture.handle);
+  glDeleteRenderbuffers(1, &rbo.handle);
+  glDeleteFramebuffers(1, &fbo.handle);
   for (unsigned int i = 0; i < textures.size(); ++i)
   {
     glDeleteTextures(1, &textures[i].handle);
@@ -165,7 +174,10 @@ void ApplicationSolar::update_planet(node *const Planet, float count) const
 
 void ApplicationSolar::render() const
 {
-
+  //bind framebuffer
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo.handle);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear attachments
+  // default framebuffer
   float count = 0.0f;
   //draws skybox
   drawSkybox();
@@ -178,6 +190,8 @@ void ApplicationSolar::render() const
     ;
   }
   //render stars
+
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
   drawStars();
 }
 
@@ -468,6 +482,35 @@ void ApplicationSolar::initializeTextures()
   }
 }
 
+//initializing framebuffer
+void ApplicationSolar::initializeFramebuffer()
+{
+  //std::cout << "firsthi";
+  //defining renderbuffer
+  glGenRenderbuffers(1, &rbo.handle);
+  glBindRenderbuffer(GL_RENDERBUFFER, rbo.handle);
+  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, initial_resolution.x, initial_resolution.y); //update resolution
+  //loading texture
+  glActiveTexture(GL_TEXTURE0);
+  glGenTextures(1, &fbo_texture.handle);
+  glBindTexture(GL_TEXTURE_2D, fbo_texture.handle);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, initial_resolution.x,
+               initial_resolution.y, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+  // defining framebuffer
+  glGenFramebuffers(1, &fbo.handle);
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo.handle);
+  glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, fbo_texture.handle, 0);
+  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo.handle);
+  // define which buffers to write
+  GLenum draw_buffers[1] = {GL_COLOR_ATTACHMENT0};
+  glDrawBuffers(1, draw_buffers);
+  if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+  {
+    std::cout << "Framebuffer not complete" << std::endl;
+  }
+}
 ///////////////////////////// callback functions for window events ////////////
 // handle key input
 void ApplicationSolar::keyCallback(int key, int action, int mods)
